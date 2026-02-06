@@ -1,61 +1,39 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import './App.css';
 
 function App() {
 
   const [tarea, setTarea] = useState("");
-  const [pendiente, setPendiente] = useState([]);
-  const [proceso, setProceso] = useState([]);
-  const [terminado, setTerminado] = useState([]);
+  const [lista, setLista] = useState([]);
 
   const agregarTarea = () => {
     if(tarea !== ""){
-      setPendiente([...pendiente, tarea]);
+      setLista([...lista, tarea]);
       setTarea("");
     }
-  };
-
-  const mover = (index, origen, destino) => {
-    const nuevaOrigen = origen.filter((_, i)=> i !== index);
-    destino.push(origen[index]);
-
-    if(origen === pendiente) setPendiente([...nuevaOrigen]);
-    if(origen === proceso) setProceso([...nuevaOrigen]);
-    if(destino === proceso) setProceso([...destino]);
-    if(destino === terminado) setTerminado([...destino]);
-  };
+  }
 
   return (
-    <div style={{display:"flex", gap:"40px", justifyContent:"center"}}>
+    <div className="App">
+      <h1>Lista SCRUM</h1>
 
-      <div>
-        <h3>Pendiente</h3>
-        <input value={tarea} onChange={(e)=>setTarea(e.target.value)} />
-        <button onClick={agregarTarea}>Agregar</button>
+      <h2>Product Backlog</h2>
 
-        {pendiente.map((t,i)=>(
-          <div key={i}>
-            {t}
-            <button onClick={()=>mover(i, pendiente, proceso)}>→</button>
-          </div>
+      <input
+        value={tarea}
+        onChange={(e)=> setTarea(e.target.value)}
+        placeholder="Nueva tarea..."
+      />
+
+      <button onClick={agregarTarea}>
+        Agregar
+      </button>
+
+      <ul>
+        {lista.map((item,index)=>(
+          <li key={index}>{item}</li>
         ))}
-      </div>
-
-      <div>
-        <h3>En proceso</h3>
-        {proceso.map((t,i)=>(
-          <div key={i}>
-            {t}
-            <button onClick={()=>mover(i, proceso, terminado)}>→</button>
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <h3>Terminado</h3>
-        {terminado.map((t,i)=>(
-          <div key={i}>{t}</div>
-        ))}
-      </div>
+      </ul>
 
     </div>
   );
